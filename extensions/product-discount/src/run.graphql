@@ -1,0 +1,35 @@
+query RunInput {
+  cart {
+    lines {
+      quantity
+      id
+      attribute {
+        key
+        value
+    }
+      merchandise {
+        __typename
+        ...on ProductVariant {
+            id
+            sku
+            product{
+              title
+              handle
+              productType
+              isGiftCard
+              hasAnyTag
+              HasTagResponse{
+                tag
+                hasTag
+              }
+            }
+        }
+      }
+    }
+  cost{
+    subtotalAmount {
+      amount
+    }
+  }
+  }
+}
