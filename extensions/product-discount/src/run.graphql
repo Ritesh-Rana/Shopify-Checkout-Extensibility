@@ -3,15 +3,22 @@ query RunInput {
     lines {
       quantity
       id
+      attribute {
+        key
+        value
+    }
       merchandise {
         __typename
         ...on ProductVariant {
             id
             sku
-            title
             product{
+              title
               handle
-              hasTags{
+              productType
+              isGiftCard
+              hasAnyTag
+              HasTagResponse{
                 tag
                 hasTag
               }
