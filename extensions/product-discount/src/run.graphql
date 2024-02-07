@@ -3,7 +3,6 @@ query RunInput {
     lines {
       quantity
       id
-      attribute
       merchandise {
         __typename
         ...on ProductVariant {
