@@ -3,10 +3,9 @@ query RunInput {
     lines {
       quantity
       id
-      attribute {
-        key
+     	Note: attribute(key: "Note") {
         value
-    }
+      }
       merchandise {
         __typename
         ...on ProductVariant {

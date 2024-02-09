@@ -28,7 +28,7 @@ export function run(input) {
   const targets = input.cart.lines
   // Only include cart lines with a quantity of two or more
   // and a targetable product variant
-  .filter(line => line.quantity >= 2)
+  .filter(line => line.quantity < 2 && line.Note?.value == "Free $220 Gift")
   .map(line => {
     const variant = /** @type {ProductVariant} */ (line.merchandise);
     return /** @type {Target} */ ({
