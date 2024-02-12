@@ -52,6 +52,7 @@ export function run(input) {
       {
         // Apply the discount to the collected targets
         targets,
+        message:"Free Gift",
         // Define a percentage-based discount
         value: {
           percentage: {
