@@ -12,6 +12,7 @@ the line item attribute value.
  * @typedef {import("../generated/api").RunInput} RunInput
  * @typedef {import("../generated/api").FunctionRunResult} FunctionRunResult
  * @typedef {import("../generated/api").CartOperation} CartOperation
+ * @typedef {import("../generated/api").ProductVariant} ProductVariant
  */
 
 /**
@@ -46,29 +47,26 @@ export function run(input) {
 };
 
 /**
- * @param {RunInput['cart']['lines'][number]} cartLine
+ * @param {RunInput['cart']['lines'][number]} cartObject
  */
 function optionallyBuildUpdateOperation(
-  { id: cartLineId, merchandise, cost, fabricLength }
+  cartObject
 ) {
-  const hasFabricLength = fabricLength && Number(fabricLength.value) > 0;
-
-  if (
-    merchandise.__typename === "ProductVariant" &&
-    hasFabricLength
-  ) {
+  let variant = /** @type {ProductVariant} */ (cartObject.merchandise);
+  let cartLineId = cartObject.id;
+  let variantId = variant.id.match(/\d+/)[0];
+  if(cartObject.Note?.value=="Free $220 Gift" && variantId=='47481604833558'){
     return {
       cartLineId,
-      title: `${merchandise.title} (${fabricLength.value}m)`,
+      title: "Tempo title change - Free Gift",
       price: {
         adjustment: {
           fixedPricePerUnit: {
-            amount: (Number(fabricLength.value) * cost.amountPerQuantity.amount).toFixed(2)
+            amount: 10000
           }
         }
       }
     };
   }
-
-  return null;
+return null;
 }
