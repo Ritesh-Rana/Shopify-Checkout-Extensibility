@@ -33,11 +33,14 @@ export function run(input) {
       const updateOperation = optionallyBuildUpdateOperation(
         cartLine
       );
-
-      if (updateOperation) {
-        return [...acc, { update: updateOperation }];
+      const expandOpration = optionallyBuildExpandOperation(
+        cartLine
+      );
+      if (updateOperation || expandOpration ) {
+        return [...acc, { update: updateOperation, expand: expandOpration }];
       }
 
+      console.log(acc);
       return acc;
     },
     []
@@ -62,11 +65,14 @@ function optionallyBuildUpdateOperation(
       price: {
         adjustment: {
           fixedPricePerUnit: {
-            amount: 10000
+            amount: 0.0
           }
         }
       }
     };
   }
 return null;
+}
+function optionallyBuildExpandOperation( cartObject){
+ return null;
 }
