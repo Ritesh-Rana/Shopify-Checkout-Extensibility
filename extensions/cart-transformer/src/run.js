@@ -33,11 +33,11 @@ export function run(input) {
       const updateOperation = optionallyBuildUpdateOperation(
         cartLine
       );
-      const expandOpration = optionallyBuildExpandOperation(
+      const expandOperation = optionallyBuildExpandOperation(
         cartLine
       );
-      if (updateOperation || expandOpration ) {
-        return [...acc, { update: updateOperation, expand: expandOpration }];
+      if (updateOperation && expandOperation) {
+        return [...acc, { update: updateOperation}, {expand: expandOperation }];
       }
 
       console.log(acc);
@@ -51,6 +51,7 @@ export function run(input) {
 
 /**
  * @param {RunInput['cart']['lines'][number]} cartObject
+ * @returns {CartOperation | null}
  */
 function optionallyBuildUpdateOperation(
   cartObject
@@ -58,7 +59,7 @@ function optionallyBuildUpdateOperation(
   let variant = /** @type {ProductVariant} */ (cartObject.merchandise);
   let cartLineId = cartObject.id;
   let variantId = variant.id.match(/\d+/)[0];
-  if(cartObject.Note?.value=="Free $220 Gift" && variantId=='47481604833558'){
+  if (cartObject.Note?.value === "Free $220 Gift" && variantId === '47481604833558') {
     return {
       cartLineId,
       title: "Tempo title change - Free Gift",
@@ -71,8 +72,28 @@ function optionallyBuildUpdateOperation(
       }
     };
   }
-return null;
+  return null;
 }
-function optionallyBuildExpandOperation( cartObject){
- return null;
+
+/**
+ * @param {RunInput['cart']['lines'][number]} cartObject
+ * @returns {CartOperation | null}
+ */
+function optionallyBuildExpandOperation(cartObject) {
+  let cartLineId = cartObject.id;
+  let merchandiseId = cartObject.merchandise.id;
+  return {
+    cartLineId,
+    expandedCartItems:{
+      merchandiseId:merchandiseId,
+      price: {
+        adjustment: {
+          fixedPricePerUnit: {
+            amount: 1
+          }
+        }
+      },
+      quantity:1
+    }
+  };
 }

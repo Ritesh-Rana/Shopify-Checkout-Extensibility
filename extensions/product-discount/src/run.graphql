@@ -17,9 +17,9 @@ query RunInput {
               productType
               isGiftCard
               hasAnyTag
-              hasTags{
-                tag
+              hasTags(tags: ["20%off","50%off"]){
                 hasTag
+                tag
               }
             }
         }

@@ -13,7 +13,7 @@ import { DiscountApplicationStrategy } from "../generated/api";
 * @type {FunctionRunResult}
 */
 const EMPTY_DISCOUNT = {
-  discountApplicationStrategy: DiscountApplicationStrategy.First,
+  discountApplicationStrategy: DiscountApplicationStrategy.Maximum,
   discounts: [],
 };
 
@@ -23,14 +23,17 @@ const EMPTY_DISCOUNT = {
 * @returns {FunctionRunResult}
 */
 export function run(input) {
-  console.log(input.cart.lines);
-  console.log(input.cart.cost.subtotalAmount.amount);
+  // console.log(input.cart.lines);
+  // console.log(input.cart.cost.subtotalAmount.amount);
   const targets = input.cart.lines
   // Only include cart lines with a quantity of two or more
   // and a targetable product variant
-  .filter(line => line.quantity == 1 && line.Note?.value == "Free $220 Gift")
+  .filter(line => line.merchandise.product.hasTags[0].hasTag===true)
   .map(line => {
     const variant = /** @type {ProductVariant} */ (line.merchandise);
+    console.log(JSON.stringify( variant   ));
+    // console.log(JSON.stringify( variant.product.hasTags   ));
+    // console.log(JSON.stringify( variant.product.hasAnyTag ));
     return /** @type {Target} */ ({
       // Use the variant ID to create a discount target
       productVariant: {
@@ -52,11 +55,11 @@ export function run(input) {
       {
         // Apply the discount to the collected targets
         targets,
-        message:"Free Gift",
+        message:"20% off",
         // Define a percentage-based discount
         value: {
           percentage: {
-            value: "100.0"
+            value: "20"
           }
         }
       }
