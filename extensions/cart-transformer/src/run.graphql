@@ -2,6 +2,7 @@ query RunInput {
   cart {
     lines {
       id
+      quantity
       cost {
         amountPerQuantity {
           amount
@@ -17,6 +18,12 @@ query RunInput {
         ... on ProductVariant {
           id
           title
+          product{
+          hasTags(tags: ["GWP-FREEGIFT"]){
+                hasTag
+                tag
+          }
+          }
         }
       }
     }

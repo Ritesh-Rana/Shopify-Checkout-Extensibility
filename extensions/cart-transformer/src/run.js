@@ -33,11 +33,9 @@ export function run(input) {
       const updateOperation = optionallyBuildUpdateOperation(
         cartLine
       );
-      const expandOperation = optionallyBuildExpandOperation(
-        cartLine
-      );
-      if (updateOperation && expandOperation) {
-        return [...acc, { update: updateOperation}, {expand: expandOperation }];
+     
+      if (updateOperation) {
+        return [...acc, { update: updateOperation}];
       }
 
       console.log(acc);
@@ -58,8 +56,8 @@ function optionallyBuildUpdateOperation(
 ) {
   let variant = /** @type {ProductVariant} */ (cartObject.merchandise);
   let cartLineId = cartObject.id;
-  let variantId = variant.id.match(/\d+/)[0];
-  if (cartObject.Note?.value === "Free $220 Gift" && variantId === '47481604833558') {
+
+  if (cartObject.Note?.value === "FREEGIFT" && cartObject.merchandise.product.hasTags[0].hasTag===true) {
     return {
       cartLineId,
       title: "Tempo title change - Free Gift",
@@ -75,25 +73,4 @@ function optionallyBuildUpdateOperation(
   return null;
 }
 
-/**
- * @param {RunInput['cart']['lines'][number]} cartObject
- * @returns {CartOperation | null}
- */
-function optionallyBuildExpandOperation(cartObject) {
-  let cartLineId = cartObject.id;
-  let merchandiseId = cartObject.merchandise.id;
-  return {
-    cartLineId,
-    expandedCartItems:{
-      merchandiseId:merchandiseId,
-      price: {
-        adjustment: {
-          fixedPricePerUnit: {
-            amount: 1
-          }
-        }
-      },
-      quantity:1
-    }
-  };
-}
+
