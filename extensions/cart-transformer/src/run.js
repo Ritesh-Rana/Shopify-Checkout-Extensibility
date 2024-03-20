@@ -31,7 +31,7 @@ export function run(input) {
     /** @param {CartOperation[]} acc */
     (acc, cartLine) => {
       const updateOperation = optionallyBuildUpdateOperation(
-        cartLine
+        cartLine,true
       );
      
       if (updateOperation) {
@@ -52,7 +52,7 @@ export function run(input) {
  * @returns {CartOperation | null}
  */
 function optionallyBuildUpdateOperation(
-  cartObject
+  cartObject,IsBonusGiftQualifierPresent
 ) {
   let variant = /** @type {ProductVariant} */ (cartObject.merchandise);
   let cartLineId = cartObject.id;
@@ -61,6 +61,19 @@ function optionallyBuildUpdateOperation(
     return {
       cartLineId,
       title: "Tempo title change - Free Gift",
+      price: {
+        adjustment: {
+          fixedPricePerUnit: {
+            amount: 0.0
+          }
+        }
+      }
+    };
+  }
+  if (IsBonusGiftQualifierPresent && cartObject.Note?.value === "YOUR GIFT WITH PURCHASE" && cartObject.merchandise.product.hasTags[1].hasTag===true) {
+    return {
+      cartLineId,
+      title: "Title change - BONUS-GIFT",
       price: {
         adjustment: {
           fixedPricePerUnit: {
